@@ -1,0 +1,20 @@
+public class LocalGmtTimestampsTest extends TestCase {  private static final String DD_MM_YYYY_HH_MM = "dd-MM-yyyy HH:mm";
+    private static final String EEE_MMM_DD_YYYY_HH_MM = "EEE, MMM dd, yyyy HH:mm";
+    private static final String EEE_MMM_DD_YYYY = "EEE, MMM dd, yyyy"; private static final String[] timestamps =
+            new String[]{"1812-08-03 23:11:00.0", "1812-08-03 00:00:00.0", "1812-08-03 00:00:01.0",
+                         "1812-08-03 23:59:59.999", "1812-08-03 24:00:00.0", "1812-08-04 00:01:00.0"          };
+private static final String[] expectedGmt =
+new String[]{" / Mon, Aug 03, 1812 23:11", " / Mon, Aug 03, 1812", " / Mon, Aug 03, 1812",           " / Mon, Aug 03, 1812 23:59", " / Tue, Aug 04, 1812", " / Tue, Aug 04, 1812 00:01"
+};    private static final String[] alertDates =            new String[]{"Fri, Mar 03, 2013 01:13", "Fri, Mar 03, 2013 12:13", "Fri, Mar 03, 2013 00:00",
+"Fri, Mar 03, 2013 23:59", "Fri, Mar 03, 2013 24:00"            };    private static final String[] expectedAlertDates =
+new String[]{"Fri, Mar 03, 2013 01:13", "Fri, Mar 03, 2013 12:13", "Fri, Mar 03, 2013",
+"Fri, Mar 03, 2013 23:59", "Fri, Mar 03, 2013 24:00"            };
+    private AlertDetailsVO vo = new AlertDetailsVO();    public void testLocalAndGmtTimestamp() {
+final String alertDate = "Fri, Mar 03, 2013 01:13";
+vo.setAlertDate(alertDate);        for (int i = 0; i < timestamps.length; ++i) {
+Timestamp timestamp = Timestamp.valueOf(timestamps[i]);  vo.setGmtTimestampRawFormat(timestamp);
+assertEquals(vo.getLocalGmtTimestamp(), alertDate + expectedGmt[i]);
+}}public void testLocalDate() {    for (int i = 0; i < alertDates.length; ++i) {
+vo.setAlertDate(alertDates[i]);
+            assertEquals(vo.getAlertDate(),expectedAlertDates[i]);
+        }    }}
