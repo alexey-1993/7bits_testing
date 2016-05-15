@@ -1,5 +1,6 @@
 package com.roon;
 
+import com.roon.util.LittleConsumer;
 import com.roon.processor.StringProcessor;
 import com.roon.processor.StringProcessorImpl;
 
@@ -21,14 +22,9 @@ public class MainClass {
     private void process(String filepath) {
         File f = new File(filepath);
         StringBuilder text = new StringBuilder();
+        Consumer<String> consumer = new LittleConsumer(text, processor);
         try (BufferedReader fr = new BufferedReader(new FileReader(f))) {
-            fr.lines().forEach(new Consumer<String>() {
-                @Override
-                public void accept(String s) {
-                    text.append(getProcessor().processString(s));
-                }
-            });
-
+            fr.lines().forEach(consumer);
             System.out.println(text);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
